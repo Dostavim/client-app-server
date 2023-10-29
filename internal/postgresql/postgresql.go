@@ -2,20 +2,25 @@ package postgresql
 
 import (
 	"clientAppService/internal/config"
-
-	"go.uber.org/zap"
+	"database/sql"
+	"fmt"
 )
 
 type PostgreSQl struct {
 	cfg       *config.DBConnectionConfig
-	log       *zap.Logger
 	connected bool
 }
 
-func NewPostgresDB(logger *zap.Logger, cfg *config.DBConnectionConfig) *PostgreSQl {
+func NewPostgresDB(cfg *config.DBConnectionConfig) *PostgreSQl {
 	return &PostgreSQl{
 		cfg:       cfg,
-		log:       logger,
 		connected: false,
 	}
+}
+
+func (pg *PostgreSQl) Connect() error {
+	_, err := sql.Open("postgres", fmt.Sprintf("user=%s password=%s dbname=%s sslmode=%s",
+		pg.cfg.User, pg.cfg.Password, pg.cfg.Dbname, pg.cfg.Sslmode))
+
+	return err
 }

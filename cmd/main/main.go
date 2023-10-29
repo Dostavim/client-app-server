@@ -2,24 +2,26 @@ package main
 
 import (
 	"clientAppService/internal/config"
-	"database/sql"
-	"fmt"
+	"clientAppService/internal/postgresql"
 	"log"
+	"net/http"
 	"os"
 )
 
 func main() {
-	postgresClient := &config.DBConnectionConfig{
+	postgresClient := postgresql.NewPostgresDB(&config.DBConnectionConfig{
 		User:     os.Getenv("DB_NAME"),
 		Password: os.Getenv("DB_PASSWORD"),
 		Dbname:   os.Getenv("DB_NAME"),
 		Sslmode:  os.Getenv("SLLMODE"),
-	}
+	})
 
-	_, err := sql.Open("postgres", fmt.Sprintf("user=%s password=%s dbname=%s sslmode=%s",
-		postgresClient.User, postgresClient.Password, postgresClient.Dbname, postgresClient.Sslmode))
+	err := postgresClient.Connect()
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Ошибка с подключением к postgres")
 	}
+
+	log.Fatal(http.ListenAndServe(":1200", nil))
+
 }

@@ -3,8 +3,6 @@ package service
 import (
 	"clientAppService/internal/postgresql"
 	"context"
-
-	"go.uber.org/zap"
 )
 
 type ClientAppService interface {
@@ -12,13 +10,11 @@ type ClientAppService interface {
 }
 
 type Service struct {
-	log      *zap.Logger
 	dbClient *postgresql.PostgreSQl
 }
 
-func NewUserService(logger *zap.Logger, db *postgresql.PostgreSQl) *Service {
+func NewUserService(db *postgresql.PostgreSQl) *Service {
 	return &Service{
-		log:      logger,
 		dbClient: db,
 	}
 }
