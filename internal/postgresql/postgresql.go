@@ -2,25 +2,26 @@ package postgresql
 
 import (
 	"clientAppService/internal/config"
+	"clientAppService/internal/postgresql/models"
 	"database/sql"
 	"fmt"
 )
 
-type PostgreSQl struct {
-	cfg       *config.DBConnectionConfig
-	connected bool
+func NewPostgresConnection(cfg *config.DBConnectionConfig) (*sql.DB, error) {
+	var db *sql.DB
+
+	db, err := sql.Open("postgres", fmt.Sprintf("user=%s password=%s dbname=%s sslmode=%s",
+		cfg.User, cfg.Password, cfg.Dbname, cfg.Sslmode))
+
+	return db, err
 }
 
-func NewPostgresDB(cfg *config.DBConnectionConfig) *PostgreSQl {
-	return &PostgreSQl{
-		cfg:       cfg,
-		connected: false,
-	}
-}
+func Create(order models.Order, db *sql.DB) error {
+	sql := `INSERT INTO Order (AuthorID, OrderID, DeliveryCost, FisrtAddress, SecondAddress,
+		DeliveryItem, IsTransit) VALUES ($1, $2, $3, $4, $5, $6, $7)`
 
-func (pg *PostgreSQl) Connect() error {
-	_, err := sql.Open("postgres", fmt.Sprintf("user=%s password=%s dbname=%s sslmode=%s",
-		pg.cfg.User, pg.cfg.Password, pg.cfg.Dbname, pg.cfg.Sslmode))
+	_, err := db.Exec(sql, order.AuthorID, order.OrderID, order.DeliveryCost,
+		order.FirstAddress, order.SecondAddress, order.DeliveryItem, order.IsTransit)
 
 	return err
 }
