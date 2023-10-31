@@ -2,7 +2,7 @@ package config
 
 type DBConnectionConfig struct {
 	Host     string
-	Port     int
+	Port     string
 	User     string
 	Password string
 	Dbname   string

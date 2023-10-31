@@ -36,7 +36,7 @@ func MakeCreateOrderEndpoint(cas service.ClientAppService) endpoint.Endpoint {
 	}
 }
 
-func DecodeCutRequest(_ context.Context, r *http.Request) (interface{}, error) {
+func DecodeCreateOrderRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var request CreateOrderRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		return nil, err

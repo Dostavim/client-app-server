@@ -1,6 +1,7 @@
 package service
 
 import (
+	"clientAppService/internal/postgresql"
 	"clientAppService/internal/postgresql/models"
 	"context"
 	"database/sql"
@@ -14,12 +15,12 @@ type ClientAppService interface {
 }
 
 type Service struct {
-	dbClient *sql.DB
+	DBClient *sql.DB
 }
 
 func NewUserService(db *sql.DB) *Service {
 	return &Service{
-		dbClient: db,
+		DBClient: db,
 	}
 }
 
@@ -35,14 +36,14 @@ func (s *Service) CreateOrder(ctx context.Context, AuthorID int, FirstAddress mo
 		ItemWeight:   ItemWeight,
 		IsTransit:    false,
 
-		FisrtPhone:  FirstPhone,
+		FirstPhone:  FirstPhone,
 		SecondPhone: SecondPhone,
 
 		FirstAddress:  FirstAddress,
 		SecondAddress: SecondAddress,
 	}
 
-	//postgresql.CreateOrder(*newOrder, s.dbClient)
+	postgresql.CreateOrder(*newOrder, s.DBClient)
 	return newOrder
 
 }
