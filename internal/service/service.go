@@ -8,8 +8,9 @@ import (
 )
 
 type ClientAppService interface {
-	Create(ctx context.Context, AuthorID int, FirstAddress string,
-		SecondAddress string, DeliveryItem string) *models.Order
+	CreateOrder(ctx context.Context, AuthorID int, FirstAddress models.Address,
+		SecondAddress models.Address, DeliveryItem string, ItemWeight string,
+		FirstPhone string, SecondPhone string) *models.Order
 }
 
 type Service struct {
@@ -22,20 +23,26 @@ func NewUserService(db *sql.DB) *Service {
 	}
 }
 
-func (s *Service) Create(ctx context.Context, AuthorID int, FirstAddress string,
-	SecondAddress string, DeliveryItem string) *models.Order {
+func (s *Service) CreateOrder(ctx context.Context, AuthorID int, FirstAddress models.Address,
+	SecondAddress models.Address, CategoryItem string, ItemWeight string, FirstPhone string,
+	SecondPhone string) *models.Order {
 
 	newOrder := &models.Order{
-		AuthorID:      AuthorID,
-		OrderID:       rand.Intn(100),
-		DeliveryCost:  300,
+		AuthorID:     AuthorID,
+		OrderID:      rand.Intn(100),
+		DeliveryCost: 300,
+		CategoryItem: CategoryItem,
+		ItemWeight:   ItemWeight,
+		IsTransit:    false,
+
+		FisrtPhone:  FirstPhone,
+		SecondPhone: SecondPhone,
+
 		FirstAddress:  FirstAddress,
 		SecondAddress: SecondAddress,
-		DeliveryItem:  DeliveryItem,
-		IsTransit:     false,
 	}
 
-	//postgresql.Create(*newOrder, s.dbClient)
+	//postgresql.CreateOrder(*newOrder, s.dbClient)
 	return newOrder
 
 }

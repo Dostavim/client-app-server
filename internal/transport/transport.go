@@ -13,9 +13,14 @@ import (
 type CreateOrderRequest struct {
 	AuthorID int `json:"Author ID"`
 
-	FirstAddress  string `json:"First Address"`
-	SecondAddress string `json:"Second Address"`
-	DeliveryItem  string `json:"Delivery Item"`
+	FisrtPhone   string         `json:"First Phone"`
+	FirstAddress models.Address `json:"First Address"`
+
+	SecondPhone   string         `json:"Second Phone"`
+	SecondAddress models.Address `json:"Second Address"`
+
+	CategoryItem string `json:"Category Item"`
+	ItemWeight   string `json:"Item Weight"`
 }
 
 type CreateOrderResponse struct {
@@ -25,7 +30,8 @@ type CreateOrderResponse struct {
 func MakeCreateOrderEndpoint(cas service.ClientAppService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(CreateOrderRequest)
-		createdOrder := cas.Create(ctx, req.AuthorID, req.FirstAddress, req.SecondAddress, req.DeliveryItem)
+		createdOrder := cas.CreateOrder(ctx, req.AuthorID, req.FirstAddress, req.SecondAddress,
+			req.CategoryItem, req.ItemWeight, req.FisrtPhone, req.SecondPhone)
 		return CreateOrderResponse{Order: *createdOrder}, nil
 	}
 }

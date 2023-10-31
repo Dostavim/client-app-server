@@ -13,6 +13,8 @@ import (
 func main() {
 	var cas service.ClientAppService = &service.Service{}
 	// postgresClient, err := postgresql.NewPostgresConnection(&config.DBConnectionConfig{
+	//	Host: 	  os.Getenv("DB_HOST"),
+	//  Port:	  os.Getenv("DB_PORT"),
 	// 	User:     os.Getenv("DB_NAME"),
 	// 	Password: os.Getenv("DB_PASSWORD"),
 	// 	Dbname:   os.Getenv("DB_NAME"),

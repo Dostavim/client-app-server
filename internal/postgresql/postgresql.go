@@ -16,12 +16,12 @@ func NewPostgresConnection(cfg *config.DBConnectionConfig) (*sql.DB, error) {
 	return db, err
 }
 
-func Create(order models.Order, db *sql.DB) error {
+func CreateOrder(order models.Order, db *sql.DB) error {
 	sql := `INSERT INTO Order (AuthorID, OrderID, DeliveryCost, FisrtAddress, SecondAddress,
 		DeliveryItem, IsTransit) VALUES ($1, $2, $3, $4, $5, $6, $7)`
 
 	_, err := db.Exec(sql, order.AuthorID, order.OrderID, order.DeliveryCost,
-		order.FirstAddress, order.SecondAddress, order.DeliveryItem, order.IsTransit)
+		order.FirstAddress, order.SecondAddress, order.CategoryItem, order.IsTransit)
 
 	return err
 }
